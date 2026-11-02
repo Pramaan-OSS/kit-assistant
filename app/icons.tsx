@@ -1,0 +1,25 @@
+// The full Lucide library is installed; import any icon directly from lucide-react.
+// These common names make the editable starting set convenient.
+export {
+  ArrowRight,
+  ArrowUpRight,
+  Check,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Copy,
+  Download,
+  ExternalLink,
+  Heart,
+  LoaderCircle,
+  Mail,
+  Menu,
+  MoreHorizontal,
+  Plus,
+  Search,
+  Settings,
+  Trash2,
+  Upload,
+  User,
+  X,
+} from "lucide-react";

@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "id": "configure-assistant",
+      "label": "Configure assistant",
+      "steps": [
+        {
+          "enterAs": "owner"
+        },
+        {
+          "goto": "/team"
+        },
+        {
+          "fill": "Assistant name",
+          "value": "Team guide"
+        },
+        {
+          "fill": "Instructions",
+          "value": "Help our team in plain words. Ask before taking an action."
+        },
+        {
+          "click": "Save assistant"
+        },
+        {
+          "expectText": "Assistant saved."
+        }
+      ]
+    }
+  ],
+  "names": {}
+}

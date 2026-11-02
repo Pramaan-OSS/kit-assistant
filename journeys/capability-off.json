@@ -1,0 +1,20 @@
+{
+  "items": [
+    {
+      "id": "capability-off",
+      "label": "Capability off",
+      "steps": [
+        {
+          "enterAs": "owner"
+        },
+        {
+          "goto": "/memory"
+        },
+        {
+          "expectText": "This capability is off."
+        }
+      ]
+    }
+  ],
+  "names": {}
+}

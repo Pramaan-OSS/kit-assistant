@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "id": "owner-settings",
+      "label": "Owner settings",
+      "steps": [
+        {
+          "enterAs": "owner"
+        },
+        {
+          "expectHeading": "Owner area"
+        },
+        {
+          "fill": "Owner email",
+          "value": "owner@example.test"
+        },
+        {
+          "fill": "Password",
+          "value": "Owner-password-12345"
+        },
+        {
+          "click": "Save sign-in"
+        },
+        {
+          "expectText": "Saved. You can now sign in"
+        }
+      ]
+    }
+  ],
+  "names": {}
+}

@@ -1,0 +1,9 @@
+{
+  "routes": ["/usage"],
+  "nav": [
+    {
+      "href": "/usage",
+      "label": "Usage"
+    }
+  ]
+}

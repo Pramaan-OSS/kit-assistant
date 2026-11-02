@@ -1,0 +1,9 @@
+{
+  "routes": ["/chat"],
+  "nav": [
+    {
+      "href": "/chat",
+      "label": "Chat"
+    }
+  ]
+}

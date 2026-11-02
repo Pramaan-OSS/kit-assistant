@@ -1,0 +1,210 @@
+{
+  "id": "assistant",
+  "version": "0.1.0",
+  "title": "Team assistant",
+  "summary": "Private team conversations, personal memory and reviewed actions, with owner usage controls.",
+  "category": "business-operations",
+  "stack": {
+    "contract": "1",
+    "template": "data",
+    "next": "16.3.6",
+    "react": "19.3.0",
+    "node": "24.18.0",
+    "packageManager": "pnpm@11.15.1"
+  },
+  "licence": "MIT",
+  "provenance": {
+    "mode": "derived",
+    "starter": "Pramaan-Dev/product-loop@370419379645405019af029fa08a75680ad75c8b",
+    "derivedFrom": ["Pramaan-Dev/product-loop@370419379645405019af029fa08a75680ad75c8b"],
+    "upstreamNotices": ["NOTICE.md"],
+    "writtenBy": "person"
+  },
+  "measured": {
+    "on": "2026-11-02",
+    "by": "person",
+    "draft": {
+      "peakMiB": 1302,
+      "limitMiB": 2560,
+      "firstAnswerSeconds": 8
+    },
+    "verifier": {
+      "peakMiB": 1028,
+      "limitMiB": 2048,
+      "seconds": 24
+    },
+    "browser": {
+      "peakMiB": 186,
+      "limitMiB": 1024
+    }
+  },
+  "entryPoints": [
+    {
+      "route": "/",
+      "file": "app/page.tsx",
+      "audience": "visitor",
+      "summary": "Sign in or create a member account."
+    },
+    {
+      "route": "/chat",
+      "file": "app/chat/page.tsx",
+      "audience": "member",
+      "summary": "Private conversations."
+    },
+    {
+      "route": "/memory",
+      "file": "app/memory/page.tsx",
+      "audience": "member",
+      "summary": "View and forget private facts."
+    },
+    {
+      "route": "/team",
+      "file": "app/team/page.tsx",
+      "audience": "owner",
+      "summary": "Configure the assistant and team."
+    },
+    {
+      "route": "/approvals",
+      "file": "app/approvals/page.tsx",
+      "audience": "member",
+      "summary": "Review requests."
+    },
+    {
+      "route": "/usage",
+      "file": "app/usage/page.tsx",
+      "audience": "owner",
+      "summary": "Owner balance and activity."
+    },
+    {
+      "route": "/owner",
+      "file": "app/owner/page.tsx",
+      "audience": "owner",
+      "summary": "Owner sign-in settings."
+    },
+    {
+      "route": "/password-reset",
+      "file": "app/password-reset/page.tsx",
+      "audience": "visitor",
+      "summary": "Request a password reset when email is configured."
+    }
+  ],
+  "roles": {
+    "owner": {
+      "source": "owner-pass",
+      "summary": "Configures the assistant, grants team access, reviews actions and views spend."
+    },
+    "admin": {
+      "source": "added-by-owner",
+      "summary": "Reviews actions for the team; cannot grant roles or view spend."
+    },
+    "member": {
+      "source": "public-sign-up",
+      "summary": "Creates an account; the owner must add it before team access."
+    },
+    "visitor": {
+      "source": "anonymous",
+      "summary": "Signs in or creates a member account."
+    }
+  },
+  "journeys": [
+    {
+      "id": "owner-settings",
+      "role": "owner",
+      "summary": "Opens owner settings through the owner pass and saves a sign-in.",
+      "status": "ships-working",
+      "checklist": "journeys/owner-settings.json"
+    },
+    {
+      "id": "configure-assistant",
+      "role": "owner",
+      "summary": "Names the assistant and gives it instructions.",
+      "status": "ships-working",
+      "checklist": "journeys/configure-assistant.json"
+    },
+    {
+      "id": "team-access",
+      "role": "owner",
+      "summary": "Adds an existing account to the team.",
+      "status": "ships-working",
+      "checklist": "journeys/team-access.json"
+    },
+    {
+      "id": "conversation-history",
+      "role": "owner",
+      "summary": "Starts a private, named conversation.",
+      "status": "ships-working",
+      "checklist": "journeys/conversation-history.json"
+    },
+    {
+      "id": "approval-decline",
+      "role": "owner",
+      "summary": "Reviews an email request and declines it, so nothing is sent.",
+      "status": "ships-working",
+      "checklist": "journeys/approval-decline.json"
+    },
+    {
+      "id": "account-signin",
+      "role": "member",
+      "summary": "Creates an account, signs out and signs back in.",
+      "status": "ships-working",
+      "checklist": "journeys/account-signin.json"
+    },
+    {
+      "id": "capability-off",
+      "role": "owner",
+      "summary": "Says plainly when remembered facts are off.",
+      "status": "ships-working",
+      "checklist": "journeys/capability-off.json"
+    },
+    {
+      "id": "streamed-answers",
+      "role": "member",
+      "summary": "Stream an answer and keep its private conversation.",
+      "status": "needs-capability",
+      "capability": "ai_model"
+    },
+    {
+      "id": "remember-and-forget",
+      "role": "member",
+      "summary": "Remember, view and forget private facts.",
+      "status": "needs-capability",
+      "capability": "ai_model"
+    },
+    {
+      "id": "approved-email",
+      "role": "member",
+      "summary": "Draft an email in chat and send after approval.",
+      "status": "needs-capability",
+      "capability": "email"
+    },
+    {
+      "id": "approval-execution",
+      "role": "owner",
+      "summary": "Execute reviewed actions and poll their jobs.",
+      "status": "needs-capability",
+      "capability": "ai_model"
+    },
+    {
+      "id": "wallet-and-activity",
+      "role": "owner",
+      "summary": "Owner sees balance, spend and recent activity.",
+      "status": "needs-capability",
+      "capability": "ai_model"
+    }
+  ],
+  "capabilities": ["accounts", "server_data", "roles", "ai_model", "email"],
+  "notIncluded": [
+    "Capabilities and the module door are off by default.",
+    "Streaming and wallet/activity need missing platform transport support listed in GAPS.md.",
+    "Email verification and password reset delivery need a configured email module and sender.",
+    "Going live requires the platform live database, off by default.",
+    "One business per app; no organisation switching or file attachments.",
+    "No billing top-up, shared memory moderation or external connections screen."
+  ],
+  "protectedPaths": [
+    "lib/accounts.ts",
+    "lib/assistant/pramaan.ts",
+    "lib/assistant/service.ts",
+    "app/api/assistant/[action]/route.ts"
+  ]
+}

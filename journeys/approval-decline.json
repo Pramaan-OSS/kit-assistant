@@ -1,0 +1,51 @@
+{
+  "items": [
+    {
+      "id": "approval-decline",
+      "label": "Approval decline",
+      "steps": [
+        {
+          "enterAs": "owner"
+        },
+        {
+          "goto": "/chat"
+        },
+        {
+          "fill": "Conversation title",
+          "value": "Decline example"
+        },
+        {
+          "click": "New conversation"
+        },
+        {
+          "fill": "To",
+          "value": "recipient@example.test"
+        },
+        {
+          "fill": "Subject",
+          "value": "Decline example"
+        },
+        {
+          "fill": "Email text",
+          "value": "This should never be sent."
+        },
+        {
+          "click": "Request email approval"
+        },
+        {
+          "expectText": "Email is waiting for approval."
+        },
+        {
+          "goto": "/approvals"
+        },
+        {
+          "click": "Decline"
+        },
+        {
+          "expectText": "Status: denied"
+        }
+      ]
+    }
+  ],
+  "names": {}
+}

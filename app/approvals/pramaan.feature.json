@@ -1,0 +1,9 @@
+{
+  "routes": ["/approvals"],
+  "nav": [
+    {
+      "href": "/approvals",
+      "label": "Approvals"
+    }
+  ]
+}

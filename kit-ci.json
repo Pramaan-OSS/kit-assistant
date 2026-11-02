@@ -1,0 +1,178 @@
+{
+  "kit": "assistant",
+  "version": "0.1.0",
+  "digest": "sha256:f04f84fb8deac3cb0137050c0ceb5622f4e0c30fa79f39f0a0b63becaaba657a",
+  "contract": "1",
+  "green": false,
+  "ranAt": "2026-11-02T03:27:30.000Z",
+  "run": null,
+  "gates": [
+    {
+      "id": "contract",
+      "ok": true,
+      "evidence": "101 files, 5 migrations, 12 journeys"
+    },
+    {
+      "id": "licence",
+      "ok": true,
+      "evidence": "MIT; derived, written by person",
+      "notes": [
+        "The similarity check against the named sources is not built yet (docs/contracts/kits.md)"
+      ]
+    },
+    {
+      "id": "secrets",
+      "ok": true,
+      "evidence": "Scanned 103 source files for credential-shaped material."
+    },
+    {
+      "id": "packages",
+      "ok": true,
+      "evidence": "3 packages beyond the starter's, every one under an allowed licence"
+    },
+    {
+      "id": "install",
+      "ok": false,
+      "evidence": "Frozen scripts-disabled install passed in Linux with pinned Node/pnpm. Platform registry-only install-egress firewall receipt and certified CI run are unavailable; no admission is claimed."
+    },
+    {
+      "id": "block-sources",
+      "ok": true,
+      "evidence": "6 OSS blocks at a61a2af8cf6d1625959356afc0b9be8557db0cbb, recorded in blocks.lock.json: all 40 source hashes match the published commit, and the 6 kept files in docs/blocks match byte for byte."
+    },
+    {
+      "id": "check",
+      "ok": true,
+      "evidence": "Clean-worktree lint passed with one inherited Avatar warning; typecheck and build passed. Linux frozen install, lint, typecheck, build: 24 seconds. Build network disconnected after install. Next page workers limited to one.",
+      "measured": {
+        "peakBytes": 1077465088,
+        "seconds": 24
+      }
+    },
+    {
+      "id": "tests",
+      "ok": true,
+      "evidence": "40 passed, 0 failed/skipped/todo, 6 sequential files, on postgres:16-alpine at 192 MiB and 0.5 CPUs. Whole pnpm test in Linux on Node 24.18.0 under an 819 MiB cap: peak 250-253 MiB over three runs, 4-5 seconds.",
+      "measured": {
+        "peakBytes": 265289728,
+        "seconds": 4,
+        "highestObservedPeakBytes": 737595392
+      }
+    },
+    {
+      "id": "migrations",
+      "ok": true,
+      "evidence": "All 5 numbered migrations applied in one transaction on postgres:16-alpine, capped at 192 MiB and 0.5 CPUs. Starter migrations preserved."
+    },
+    {
+      "id": "draft",
+      "ok": true,
+      "evidence": "Webpack development mode plus fake socket service: first page 8 seconds from container start; all 17 headless checks passed; 50 peak tasks, cache 106 MiB.",
+      "measured": {
+        "firstAnswerSeconds": 8,
+        "peakBytes": 1365139456,
+        "pids": 50,
+        "limitMiB": 2560
+      }
+    },
+    {
+      "id": "browser",
+      "ok": true,
+      "evidence": "All 17 headless checks passed on the Linux production server and again on webpack development mode, including all capability-dependent enabled/off flows. Desktop screenshots inspected; mobile has no horizontal overflow; no page errors.",
+      "measured": {
+        "peakBytes": 194818048,
+        "pids": 29,
+        "limitMiB": 1024,
+        "headlessChecks": 17
+      }
+    },
+    {
+      "id": "owner-pass",
+      "ok": true,
+      "evidence": "Headless checks cover owner entry, replay, expiry, wrong project, wrong role, invalid signature and owner credential sign-in."
+    },
+    {
+      "id": "authorization",
+      "ok": true,
+      "evidence": "Headless checks cover signed-out/unassigned access, server-owned signup role, same-origin writes, member/admin/owner permissions, private history and memory scopes, removed membership and duplicate approval decisions."
+    },
+    {
+      "id": "journey:owner-settings",
+      "ok": true,
+      "evidence": "Shipping checklist passed headlessly against next start, on its own empty database as kit CI runs it."
+    },
+    {
+      "id": "journey:configure-assistant",
+      "ok": true,
+      "evidence": "Shipping checklist passed headlessly against next start, on its own empty database as kit CI runs it."
+    },
+    {
+      "id": "journey:team-access",
+      "ok": true,
+      "evidence": "Shipping checklist passed headlessly against next start, on its own empty database as kit CI runs it."
+    },
+    {
+      "id": "journey:conversation-history",
+      "ok": true,
+      "evidence": "Shipping checklist passed headlessly against next start, on its own empty database as kit CI runs it."
+    },
+    {
+      "id": "journey:approval-decline",
+      "ok": true,
+      "evidence": "Shipping checklist passed headlessly against next start, on its own empty database as kit CI runs it."
+    },
+    {
+      "id": "journey:account-signin",
+      "ok": true,
+      "evidence": "Shipping checklist passed headlessly against next start, on its own empty database as kit CI runs it."
+    },
+    {
+      "id": "journey:capability-off",
+      "ok": true,
+      "evidence": "Shipping checklist passed headlessly against next start, on its own empty database as kit CI runs it."
+    },
+    {
+      "id": "journey:streamed-answers",
+      "ok": true,
+      "evidence": "Fully implemented and passed end to end with fake module HTTP service, enabled and disabled, in production and development. Remains needs-capability pending platform deployment/transport."
+    },
+    {
+      "id": "journey:remember-and-forget",
+      "ok": true,
+      "evidence": "Fully implemented and passed end to end with fake module HTTP service, enabled and disabled, in production and development. Remains needs-capability pending platform deployment/transport."
+    },
+    {
+      "id": "journey:approved-email",
+      "ok": true,
+      "evidence": "Fully implemented and passed end to end with fake module HTTP service, enabled and disabled, in production and development. Remains needs-capability pending platform deployment/transport."
+    },
+    {
+      "id": "journey:approval-execution",
+      "ok": true,
+      "evidence": "Fully implemented and passed end to end with fake module HTTP service, enabled and disabled, in production and development. Remains needs-capability pending platform deployment/transport."
+    },
+    {
+      "id": "journey:wallet-and-activity",
+      "ok": true,
+      "evidence": "Fully implemented and passed end to end with fake module HTTP service, enabled and disabled, in production and development. Remains needs-capability pending platform deployment/transport."
+    }
+  ],
+  "measured": {
+    "on": "2026-11-02",
+    "by": "person",
+    "draft": {
+      "peakMiB": 1302,
+      "limitMiB": 2560,
+      "firstAnswerSeconds": 8
+    },
+    "verifier": {
+      "peakMiB": 1028,
+      "limitMiB": 2048,
+      "seconds": 24
+    },
+    "browser": {
+      "peakMiB": 186,
+      "limitMiB": 1024
+    }
+  }
+}

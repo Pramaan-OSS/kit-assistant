@@ -1,0 +1,27 @@
+{
+  "items": [
+    {
+      "id": "conversation-history",
+      "label": "Conversation history",
+      "steps": [
+        {
+          "enterAs": "owner"
+        },
+        {
+          "goto": "/chat"
+        },
+        {
+          "fill": "Conversation title",
+          "value": "Owner notes"
+        },
+        {
+          "click": "New conversation"
+        },
+        {
+          "expectHeading": "Conversation"
+        }
+      ]
+    }
+  ],
+  "names": {}
+}

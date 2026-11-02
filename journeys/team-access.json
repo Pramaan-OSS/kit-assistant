@@ -1,0 +1,50 @@
+{
+  "items": [
+    {
+      "id": "team-access",
+      "label": "Add an existing account to the team.",
+      "steps": [
+        {
+          "enterAs": "visitor"
+        },
+        {
+          "goto": "/"
+        },
+        {
+          "click": "Create an account"
+        },
+        {
+          "fill": "Email",
+          "value": "shipping-member@example.test"
+        },
+        {
+          "fill": "Password",
+          "value": "Shipping-password-12345"
+        },
+        {
+          "click": "Create account"
+        },
+        {
+          "expectText": "Signed in as shipping-member@example.test."
+        },
+        {
+          "enterAs": "owner"
+        },
+        {
+          "goto": "/team"
+        },
+        {
+          "fill": "Member email",
+          "value": "shipping-member@example.test"
+        },
+        {
+          "click": "Save team access"
+        },
+        {
+          "expectText": "Team access saved."
+        }
+      ]
+    }
+  ],
+  "names": {}
+}

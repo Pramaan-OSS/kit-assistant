@@ -1,0 +1,9 @@
+{
+  "routes": ["/team"],
+  "nav": [
+    {
+      "href": "/team",
+      "label": "Team"
+    }
+  ]
+}

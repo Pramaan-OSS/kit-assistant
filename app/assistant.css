@@ -1,0 +1,153 @@
+.assistant,
+.workspace {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px 24px 100px;
+  color: var(--fg, #171717);
+  font-family: var(--sans, Arial, sans-serif);
+}
+.assistant h1,
+.workspace h1 {
+  font-size: 2.4rem;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  margin: 12px 0 24px;
+}
+.assistant h2,
+.workspace h2 {
+  font-size: 1.3rem;
+  font-weight: 650;
+  margin: 0 0 18px;
+}
+.assistant h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 12px;
+}
+.assistant section,
+.workspace section {
+  background: var(--card-top, #fff);
+  border: 1px solid var(--line, #ddd);
+  border-radius: 16px;
+  padding: 24px;
+  margin-top: 24px;
+}
+.assistant nav,
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 18px 0;
+}
+.assistant a,
+.workspace a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.assistant p,
+.workspace p {
+  margin: 12px 0;
+  line-height: 1.6;
+}
+.assistant label,
+.workspace label {
+  display: grid;
+  gap: 6px;
+  font-weight: 550;
+  margin: 16px 0;
+}
+.assistant input,
+.assistant textarea,
+.assistant select,
+.workspace input {
+  width: 100%;
+  border: 1px solid #888;
+  border-radius: 9px;
+  padding: 10px 12px;
+  background: #fff;
+  color: #171717;
+  font: inherit;
+}
+.assistant textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+.assistant button,
+.workspace button {
+  border: 1px solid #444;
+  border-radius: 9px;
+  padding: 9px 15px;
+  background: #222;
+  color: #fff;
+  cursor: pointer;
+  margin: 8px 10px 8px 0;
+  font: inherit;
+}
+.assistant button:disabled,
+.workspace button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+.assistant .check {
+  display: flex;
+  align-items: center;
+}
+.assistant .check input {
+  width: auto;
+}
+.assistant article {
+  border-top: 1px solid #bbb;
+  margin-top: 24px;
+  padding-top: 24px;
+}
+.assistant .message {
+  display: grid;
+  gap: 6px;
+  border-left: 3px solid #999;
+  padding: 12px 16px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.assistant [role="status"] {
+  background: #fff6db;
+  border-radius: 8px;
+  padding: 12px;
+}
+.assistant [role="status"]:empty {
+  display: none;
+}
+.assistant dt {
+  font-weight: 600;
+  margin-top: 12px;
+}
+.assistant dd {
+  margin: 5px 0;
+}
+.eyebrow {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #555;
+}
+.email-body {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+:focus-visible {
+  outline: 3px solid #2854bd;
+  outline-offset: 3px;
+}
+@media (max-width: 560px) {
+  .assistant,
+  .workspace {
+    padding: 24px 16px 70px;
+  }
+  .assistant section,
+  .workspace section {
+    padding: 18px;
+  }
+  .assistant h1,
+  .workspace h1 {
+    font-size: 2rem;
+  }
+}

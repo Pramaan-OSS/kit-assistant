@@ -1,0 +1,18 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.14/schema.json",
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "**",
+      "!**/node_modules",
+      "!product",
+      "!**/.next",
+      "!**/.pnpm-store",
+      "!next-env.d.ts",
+      "!app/routes.generated.ts"
+    ]
+  },
+  "formatter": { "enabled": true, "indentStyle": "space", "lineWidth": 100 },
+  "linter": { "enabled": true },
+  "css": { "parser": { "tailwindDirectives": true } }
+}

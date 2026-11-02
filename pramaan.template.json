@@ -1,0 +1,21 @@
+{
+  "template": "data",
+  "version": "1",
+  "protectedPaths": [
+    "package.json",
+    "pnpm-lock.yaml",
+    ".npmrc",
+    "biome.json",
+    "tsconfig.json",
+    "next.config.ts",
+    "postcss.config.mjs",
+    "app/api/health/route.ts",
+    "app/layout.tsx",
+    "scripts/check-imports.mjs",
+    "scripts/generate-routes.mjs",
+    "STACK.md",
+    "pramaan.template.json"
+  ],
+  "routes": ["/", "/api/health"],
+  "data": "server"
+}

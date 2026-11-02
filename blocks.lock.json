@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "blocks": [
+    {
+      "id": "chat",
+      "version": "0.1.0",
+      "source": "Pramaan-OSS/blocks",
+      "sourceCommit": "a61a2af8cf6d1625959356afc0b9be8557db0cbb",
+      "sourcePath": "registry/chat",
+      "licence": "MIT",
+      "sourceHashes": {
+        "registry/chat/README.md": "6016067572b15c7ae3fa02bb339e8e45f103abc94d39a86db7130f64c4ce3854",
+        "registry/chat/app/api/pramaan/chat/route.ts": "4d78ac352294a29bb7728c5225f9405b3691c08d965d8ba91badb32d1da54396",
+        "registry/chat/app/api/pramaan/chat/tool/route.ts": "684c11ff6fef12c71b6eb42f696707e9964af7cd6453b1bdff65852d682eaf62",
+        "registry/chat/components/pramaan/chat/chat-panel.tsx": "e3f28038e00233cf8f0618f60d22557938ffaa84f80db4f08cc85360dbfe836c",
+        "registry/chat/components/pramaan/chat/stream.ts": "b1ff27b5668419957ac97dc62d8a0786015a1f53119c77055d161b93b7347692",
+        "registry/chat/lib/pramaan/chat-tools.ts": "fbba0d59f17296d04af4cca0a7e908fd18e1396d5b73980d636c8b1c3019b431",
+        "registry/chat/lib/pramaan/chat.ts": "46ada0fa566a6bb3979c8230bb86f95c696b9aba009ed5f7858fca3b828bc866"
+      }
+    },
+    {
+      "id": "memory",
+      "version": "0.1.0",
+      "source": "Pramaan-OSS/blocks",
+      "sourceCommit": "a61a2af8cf6d1625959356afc0b9be8557db0cbb",
+      "sourcePath": "registry/memory",
+      "licence": "MIT",
+      "sourceHashes": {
+        "registry/memory/README.md": "7a5c83814404e82db4e96fc1acdca1b8ded7607a94a04aeb4854504c4930fed9",
+        "registry/memory/app/api/pramaan/memory/[id]/route.ts": "6e23022b7112864e341058959172547ad1225a90aae2c3bfa17f33e2cc046d99",
+        "registry/memory/app/api/pramaan/memory/changes/route.ts": "76e377de7bcfa7f85e9a31b15d9f306c6d6bcf289882ba9c6c0a9d9bd1e730e0",
+        "registry/memory/app/api/pramaan/memory/forget/route.ts": "6ea1eb64bc204a28be9238fe56ea189867f3497603ae2616afe1751eecbad3e3",
+        "registry/memory/app/api/pramaan/memory/org/decide/route.ts": "066a9a22561fba7de91d0a31c75b28b32977c3b10318b86f869fcf65d282b0b8",
+        "registry/memory/app/api/pramaan/memory/org/route.ts": "8c21b76126d6e4df98d215e591e0094f710099099d8379efb7508afa937c8ee3",
+        "registry/memory/app/api/pramaan/memory/route.ts": "d2e3643d73314cb8dcaac695c10e0a09d660d2a8a51553ac1cdb12e5349e7b88",
+        "registry/memory/components/pramaan/memory/memory-viewer.tsx": "c8625e53451620656185d484f9fad6b21818272869dd2305ad83efec47eb4896",
+        "registry/memory/lib/pramaan/memory.ts": "ed5a5a9c03b820e68683c7075fa72c9d5ceec61004fff7fc1bdc8e62e1d2d42f"
+      }
+    },
+    {
+      "id": "approvals",
+      "version": "0.1.0",
+      "source": "Pramaan-OSS/blocks",
+      "sourceCommit": "a61a2af8cf6d1625959356afc0b9be8557db0cbb",
+      "sourcePath": "registry/approvals",
+      "licence": "MIT",
+      "sourceHashes": {
+        "registry/approvals/README.md": "34a3ba5dd1a814d3a7fabe3df04ad482e05fdee93dc414b7ecc616dc871a047d",
+        "registry/approvals/app/api/pramaan/approvals/[id]/decide/route.ts": "0ee55ffd68501541abb0da8b60e32daac8cc8d4fa35df7e5bb3685c5a4c94f25",
+        "registry/approvals/app/api/pramaan/approvals/[id]/route.ts": "a80d5c0ef178bf3da8044092eb0f3dd83cc30ba2044c8e8b74265d664880d26c",
+        "registry/approvals/app/api/pramaan/approvals/route.ts": "9b3647da036d1a07496c16ade546b6e282aa1c0fb830d15062aebaae9e463c9f",
+        "registry/approvals/components/pramaan/approvals/approval-detail.tsx": "d61aa4a517cc5765bee3a6998ba9a14ffa6f552244358a188882962fb4a9683b",
+        "registry/approvals/components/pramaan/approvals/approval-inbox.tsx": "c38572caa1a734609dac3b39c63aa37e7f836c8e6898ad97ce3ffb8d62c4448f",
+        "registry/approvals/components/pramaan/approvals/approvals-badge.tsx": "042c257b20dab106efbb009519f1b744a030b0f124a4926523890f6c09ceaba3",
+        "registry/approvals/components/pramaan/approvals/history.ts": "735bd27ac790b3268e9528738bfb77d32f082fb12258ab927b3117e61525c591",
+        "registry/approvals/lib/pramaan/approvals.ts": "d1a1c23e12917a5f094249a27a14a472d3d2057ea022cfd90c4d055e1c22b7a5"
+      }
+    },
+    {
+      "id": "wallet",
+      "version": "0.1.0",
+      "source": "Pramaan-OSS/blocks",
+      "sourceCommit": "a61a2af8cf6d1625959356afc0b9be8557db0cbb",
+      "sourcePath": "registry/wallet",
+      "licence": "MIT",
+      "sourceHashes": {
+        "registry/wallet/README.md": "bb57524431e679c7c9191cdc5e01edb8e720a6c1beb48d2bad99c9f11622e0e2",
+        "registry/wallet/app/api/pramaan/wallet/customers/[id]/route.ts": "65e2d9769f4b2c6ed5cb5d20b5b1fe83d05873ea8deff5f993d4cda5d4b7a5b6",
+        "registry/wallet/app/api/pramaan/wallet/route.ts": "262dcbf7238ac51918e4dc26e512de58cfa592ac6ba62085e740e9244e2f009c",
+        "registry/wallet/app/api/pramaan/wallet/usage/route.ts": "234ba3ec4eff72a0b415e0f2f3bd776be51b2f9f117f78232d38e3fe46de5283",
+        "registry/wallet/components/pramaan/wallet/wallet-panel.tsx": "edd8529164f1f5ff5c6f12d16edf41754ad8266e4665dc12bd83a26840133d03",
+        "registry/wallet/lib/pramaan/wallet.ts": "0ea8c2f2492d7445ae0f1afc36c3c70264511b34f9dc25862a6a9a5eb9bd566b"
+      }
+    },
+    {
+      "id": "activity",
+      "version": "0.1.0",
+      "source": "Pramaan-OSS/blocks",
+      "sourceCommit": "a61a2af8cf6d1625959356afc0b9be8557db0cbb",
+      "sourcePath": "registry/activity",
+      "licence": "MIT",
+      "sourceHashes": {
+        "registry/activity/README.md": "baebda364f2fcd3a8f97d7dde3c55d579cc2fc8f5a95be9cf42384befff55850",
+        "registry/activity/app/api/pramaan/activity/[id]/route.ts": "fc9089ce11bf2e275c0eb1232751887b0324a539915c52596db7d594b7e331ef",
+        "registry/activity/app/api/pramaan/activity/deliveries/route.ts": "e5a91895a716c10c395451533f7acb1f6d45f7eb71ce994a6b837c121a5daf9c",
+        "registry/activity/app/api/pramaan/activity/route.ts": "b8839d657232f09a352f678ebf917d4ed27e7dcfb8ad916e81e8f815a5b9944a",
+        "registry/activity/components/pramaan/activity/activity-log.tsx": "4441d5baa33e9d597b0fa382914e95a7dfea94e190ca9fd43fdbc5326f652f50",
+        "registry/activity/lib/pramaan/activity.ts": "862d3c7b0fc2bbbae4c7a583d90a07b1edf35daf513277c857dac6c53e759f31"
+      }
+    },
+    {
+      "id": "theme",
+      "version": "0.1.0",
+      "source": "Pramaan-OSS/blocks",
+      "sourceCommit": "a61a2af8cf6d1625959356afc0b9be8557db0cbb",
+      "sourcePath": "registry/theme",
+      "licence": "MIT",
+      "sourceHashes": {
+        "registry/theme/lib/pramaan/fonts.ts": "de90da679c962d19170f0dcd78f69558b435dd8a8aeba8b3bc176ecc754ff410",
+        "theme.css": "39e6aafb751ce69c964c0db7917af1b5112d9e64d0f9a5b2e38f48b1223bbdbc",
+        "LICENSE": "9fcf124ee07a003036108e6d42b2dec65c8999122a481d8b79b942e0b1605480"
+      }
+    }
+  ],
+  "kept": {
+    "docs/blocks/chat.md": "registry/chat/README.md",
+    "docs/blocks/memory.md": "registry/memory/README.md",
+    "docs/blocks/approvals.md": "registry/approvals/README.md",
+    "docs/blocks/wallet.md": "registry/wallet/README.md",
+    "docs/blocks/activity.md": "registry/activity/README.md",
+    "docs/blocks/LICENSE": "LICENSE"
+  },
+  "adaptations": {
+    "chat": "Adapted to starter app accounts and one plain HTTP client through the platform module door; no SDK. Source hashes identify the published registry files before adaptation; executable code lives in lib/assistant and app. Replies stream from llm.chat; a model-drafted email becomes an approval request and is never sent from chat.",
+    "memory": "Adapted to starter app accounts and one plain HTTP client through the platform module door; no SDK. Source hashes identify the published registry files before adaptation; executable code lives in lib/assistant and app. Scope is the project and the signed-in account, set on the server. Shared organisation memory moderation is left out.",
+    "approvals": "Adapted to starter app accounts and one plain HTTP client through the platform module door; no SDK. Source hashes identify the published registry files before adaptation; executable code lives in lib/assistant and app. The approval inbox is kept in this app's Postgres; an approved email runs email.send with the request id as its idempotency key.",
+    "wallet": "Adapted to starter app accounts and one plain HTTP client through the platform module door; no SDK. Source hashes identify the published registry files before adaptation; executable code lives in lib/assistant and app. Owner-only balance and spend; top-up and customer billing are left out.",
+    "activity": "Adapted to starter app accounts and one plain HTTP client through the platform module door; no SDK. Source hashes identify the published registry files before adaptation; executable code lives in lib/assistant and app. Owner-only recent activity, falling back to daily totals; webhook administration is left out.",
+    "theme": "Adapted to starter app accounts and one plain HTTP client through the platform module door; no SDK. Source hashes identify the published registry files before adaptation; executable code lives in lib/assistant and app. Fonts come from bundled font packages; app/theme.css carries the styles."
+  }
+}

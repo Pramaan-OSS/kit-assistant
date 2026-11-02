@@ -1,0 +1,54 @@
+{
+  "items": [
+    {
+      "id": "account-signin",
+      "label": "Create an account, sign out and sign back in",
+      "steps": [
+        {
+          "enterAs": "visitor"
+        },
+        {
+          "goto": "/"
+        },
+        {
+          "click": "Create an account"
+        },
+        {
+          "fill": "Email",
+          "value": "signin-member@example.test"
+        },
+        {
+          "fill": "Password",
+          "value": "Signin-password-12345"
+        },
+        {
+          "click": "Create account"
+        },
+        {
+          "expectText": "Signed in as signin-member@example.test."
+        },
+        {
+          "click": "Sign out"
+        },
+        {
+          "click": "Use an existing account"
+        },
+        {
+          "fill": "Email",
+          "value": "signin-member@example.test"
+        },
+        {
+          "fill": "Password",
+          "value": "Signin-password-12345"
+        },
+        {
+          "click": "Sign in"
+        },
+        {
+          "expectText": "Signed in as signin-member@example.test."
+        }
+      ]
+    }
+  ],
+  "names": {}
+}

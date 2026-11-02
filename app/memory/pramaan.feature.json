@@ -1,0 +1,9 @@
+{
+  "routes": ["/memory"],
+  "nav": [
+    {
+      "href": "/memory",
+      "label": "Memory"
+    }
+  ]
+}
