@@ -24,6 +24,7 @@ One business configures an assistant. Public sign-up creates an unassigned membe
 - `lib/assistant/browser.ts`: same-origin browser JSON requests.
 - `src/db/migrations/0001` through `0004`: immutable starter migrations, including verification and reset proofs.
 - `src/db/migrations/0100-assistant.sql`: assistant settings, members, private conversations, messages, approvals and memory operations.
+- `src/db/migrations/0101-release-member.sql`: deleting an account clears `decided_by` on requests it decided; each request keeps its status and job reference.
 - `blocks.lock.json`: each published block this kit adapts, at its commit, with the SHA-256 of every source file and a note on how it was adapted. `docs/blocks/`: the blocks' READMEs and licence, kept byte for byte. The adapted code lives in `lib/assistant` and `app`.
 - `scripts/fake-door.mjs`: standalone test module service, never loaded by production routes.
 - `scripts/local-server.mjs`: test-only server on port 3412 with the fake socket.
@@ -34,7 +35,7 @@ One business configures an assistant. Public sign-up creates an unassigned membe
 
 ## Add a field
 
-For an assistant description, add `0101-assistant-description.sql` with an additive `ALTER TABLE assistant_settings ADD COLUMN description text NOT NULL DEFAULT ''`. Add its bounded input and parameterised query in `lib/assistant/service.ts`, then its labelled form field in `app/assistant-screen.tsx`. Test that the owner can save it, a member cannot, and existing settings survive the migration. Never edit starter or applied migrations.
+For an assistant description, add `0102-assistant-description.sql` with an additive `ALTER TABLE assistant_settings ADD COLUMN description text NOT NULL DEFAULT ''`. Add its bounded input and parameterised query in `lib/assistant/service.ts`, then its labelled form field in `app/assistant-screen.tsx`. Test that the owner can save it, a member cannot, and existing settings survive the migration. Never edit starter or applied migrations.
 
 ## Add a page
 
@@ -58,7 +59,7 @@ Roles live in `app_users.role`. The owner grants `member` or `admin` through the
 
 ## Approval and retry rules
 
-An email draft is immutable after creation. The owner/admin reviews those exact fields; the request id is its persistent dispatch key. Declined or expired requests never execute. A definite capability-off refusal keeps it approved for retry under the same key. A running job is polled by its locally stored job reference. An unknown delivery outcome is held for reconciliation and cannot be blindly retried. A completed request cannot execute twice. Private memory operations have persistent keys and locally owned job references.
+An email draft is immutable after creation. The owner/admin reviews those exact fields; the request id is its persistent dispatch key. Declined or expired requests never execute. A definite capability-off refusal keeps it approved for retry under the same key. Approving holds no database connection or row lock during the module call: the row is marked approved, the call runs, then the outcome is recorded, each in its own short statement. The module runs one call per key, so a second click on a running call is refused as uncertain until the first result lands and replaces that. A running job is polled by its locally stored job reference. An unknown delivery outcome is held for reconciliation and cannot be blindly retried. A completed request cannot execute twice. Private memory operations have persistent keys and locally owned job references.
 
 ## Run and check
 

@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { setTimeout } from "node:timers/promises";
 import { Pool } from "pg";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -40,6 +41,35 @@ async function chat(u = alice, message = "Hello") {
   const res = await app.chat(u, { id: c.id, message, key: randomUUID() });
   return { id: c.id, stream: await res.text() };
 }
+const accountsOn = (pool: Pool) =>
+  createAccounts(pool, {
+    secret: "test-secret-for-assistant-contract-123456",
+    projectId: "assistant-test",
+    origin: "http://localhost",
+    secureCookies: false,
+    publicSignUp: true,
+    sessionSeconds: 3600,
+    passwordMinLength: 12,
+    maxBodyBytes: 16384,
+    taskTitleLength: 240,
+    authAttempts: 10,
+    authClientAttempts: 30,
+    authWindowSeconds: 60,
+  });
+const accountRequest = (action: string, input: object) =>
+  new Request(`http://localhost/api/account/${action}`, {
+    method: "POST",
+    headers: { origin: "http://localhost", "content-type": "application/json" },
+    body: JSON.stringify(input),
+  });
+const statusOf = async (id: string) =>
+  (await db.query("SELECT status FROM assistant_approvals WHERE id=$1", [id])).rows[0].status;
+const emailCalls = () =>
+  fake.calls.filter((c: { route: string }) => c.route.endsWith("email.send")).length;
+async function doorReaches(count: number) {
+  for (let i = 0; i < 200 && emailCalls() < count; i++) await setTimeout(10);
+  expect(emailCalls()).toBe(count);
+}
 async function draft() {
   const c = (await call(alice, "conversations", { title: "Email" })) as { id: string };
   await call(alice, "email", {
@@ -73,8 +103,11 @@ beforeEach(async () => {
   fake.state.missingCalls = false;
   fake.state.unknownEmail = false;
   fake.state.malformedStream = false;
+  fake.state.slowEmailMs = 0;
+  fake.state.failSlowEmail = false;
   fake.facts.clear();
   fake.sent.length = 0;
+  fake.calls.length = 0;
 });
 afterAll(async () => {
   await fake.close();
@@ -186,6 +219,146 @@ describe("Assistant on a real database and fake module socket", () => {
       status: 409,
     });
   });
+  it("keeps approvals, second clicks and sign-in moving while the door is slow", async () => {
+    // The platform's pool size. The short connect wait turns a held pool into a failure rather than a long hang.
+    const small = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      max: 3,
+      connectionTimeoutMillis: 1500,
+    });
+    const slowApp = createAssistant(small, pramaan, "assistant-test");
+    const approve = (id: string) =>
+      slowApp.handle(owner, "approvals", "POST", { id, decision: "approve" });
+    try {
+      const accounts = accountsOn(small);
+      const member = { email: "slow@example.test", password: "test-password-long" };
+      expect((await accounts.handle(accountRequest("signup", member), "signup")).status).toBe(200);
+      const ids = [await draft(), await draft(), await draft(), await draft()];
+      fake.state.slowEmailMs = 3000;
+      const slow = ids.slice(0, 3).map(approve);
+      await doorReaches(3);
+      const fourth = approve(ids[3] as string);
+      await doorReaches(4);
+      await expect(approve(ids[0] as string)).rejects.toMatchObject({ unknown: true });
+      expect((await accounts.handle(accountRequest("signin", member), "signin")).status).toBe(200);
+      await Promise.all([...slow, fourth]);
+      for (const id of ids) {
+        expect(await statusOf(id)).toBe("waiting");
+        await call(owner, "approval-status", { id });
+      }
+      expect(fake.sent).toHaveLength(4);
+    } finally {
+      await small.end();
+    }
+  }, 15000);
+  it("runs one call for two overlapping clicks and keeps the first click's result", async () => {
+    const id = await draft();
+    fake.state.slowEmailMs = 300;
+    const first = call(owner, "approvals", { id, decision: "approve" });
+    await doorReaches(1);
+    await expect(call(owner, "approvals", { id, decision: "approve" })).rejects.toMatchObject({
+      unknown: true,
+    });
+    expect(await statusOf(id)).toBe("unknown");
+    await expect(call(owner, "approvals", { id, decision: "deny" })).rejects.toMatchObject({
+      status: 409,
+    });
+    await first;
+    expect(await statusOf(id)).toBe("waiting");
+    await call(owner, "approval-status", { id });
+    expect(await statusOf(id)).toBe("done");
+    expect(fake.sent).toHaveLength(1);
+  });
+  it("never lets a late uncertain refusal replace the running call's result", async () => {
+    const id = await draft();
+    fake.state.slowEmailMs = 300;
+    let finish = () => {};
+    const held = new Promise<void>((resolve) => {
+      finish = resolve;
+    });
+    const late = {
+      async query(sql: string, values: unknown[]) {
+        if (sql.includes("status='unknown' WHERE id=$1")) await held;
+        return db.query(sql, values);
+      },
+    } as unknown as Pool;
+    const first = call(owner, "approvals", { id, decision: "approve" });
+    await doorReaches(1);
+    const second = createAssistant(late, pramaan, "assistant-test").handle(
+      owner,
+      "approvals",
+      "POST",
+      { id, decision: "approve" },
+    );
+    await first;
+    finish();
+    await expect(second).rejects.toMatchObject({ unknown: true });
+    expect(await statusOf(id)).toBe("waiting");
+  });
+  it("keeps a request retryable when the running call fails after an overlapping click", async () => {
+    const id = await draft();
+    fake.state.slowEmailMs = 300;
+    fake.state.failSlowEmail = true;
+    const first = call(owner, "approvals", { id, decision: "approve" });
+    await doorReaches(1);
+    await expect(call(owner, "approvals", { id, decision: "approve" })).rejects.toMatchObject({
+      unknown: true,
+    });
+    await expect(first).rejects.toMatchObject({ unknown: false, off: false });
+    expect(await statusOf(id)).toBe("approved");
+    fake.state.slowEmailMs = 0;
+    await call(owner, "approvals", { id, decision: "approve" });
+    await call(owner, "approval-status", { id });
+    expect(fake.sent).toHaveLength(1);
+  });
+  it("recovers an outcome it could not record by retrying under the same key", async () => {
+    const id = await draft();
+    let lost = false;
+    const flaky = {
+      query(sql: string, values: unknown[]) {
+        if (!lost && sql.includes("job_id=$3")) {
+          lost = true;
+          return Promise.reject(new Error("storage went away"));
+        }
+        return db.query(sql, values);
+      },
+    } as unknown as Pool;
+    const flakyApp = createAssistant(flaky, pramaan, "assistant-test");
+    const approve = () => flakyApp.handle(owner, "approvals", "POST", { id, decision: "approve" });
+    await expect(approve()).rejects.toThrow("storage went away");
+    expect(await statusOf(id)).toBe("approved");
+    await approve();
+    expect(await statusOf(id)).toBe("waiting");
+    await call(owner, "approval-status", { id });
+    expect(fake.sent).toHaveLength(1);
+    expect(emailCalls()).toBe(2);
+  });
+  it("releases a member who decided a request, and the request keeps its outcome", async () => {
+    const id = await draft();
+    await call(owner, "team", { email: bob.email, role: "admin" });
+    await call({ ...bob, role: "admin" }, "approvals", { id, decision: "approve" });
+    await call(owner, "team", { email: bob.email });
+    // The starter's own statement, from the owner action in lib/accounts.ts once it is re-synced here.
+    const released = await db.query(
+      "DELETE FROM app_users WHERE email=$1 AND role='member' AND email_verified_at IS NULL AND id<>$2",
+      [bob.email, owner.id],
+    );
+    expect(released.rowCount).toBe(1);
+    const row = (
+      await db.query("SELECT status,decided_by,job_id,input FROM assistant_approvals WHERE id=$1", [
+        id,
+      ])
+    ).rows[0];
+    expect(row).toMatchObject({
+      status: "waiting",
+      decided_by: null,
+      job_id: expect.any(String),
+      input: { to: "recipient@example.test", subject: "Proposal" },
+    });
+    await call(owner, "approval-status", { id });
+    expect(await statusOf(id)).toBe("done");
+    expect(fake.sent).toHaveLength(1);
+  });
   it("shows capability-off for chat, memory and owner wallet/activity", async () => {
     fake.state.off = true;
     await expect(chat()).rejects.toMatchObject({ off: true });
@@ -249,29 +422,12 @@ describe("Assistant on a real database and fake module socket", () => {
     ).toBe(false);
   });
   it("keeps the starter accounts and owner pass working with server-owned roles", async () => {
-    const accounts = createAccounts(db, {
-      secret: "test-secret-for-assistant-contract-123456",
-      projectId: "assistant-test",
-      origin: "http://localhost",
-      secureCookies: false,
-      publicSignUp: true,
-      sessionSeconds: 3600,
-      passwordMinLength: 12,
-      maxBodyBytes: 16384,
-      taskTitleLength: 240,
-      authAttempts: 10,
-      authClientAttempts: 30,
-      authWindowSeconds: 60,
-    });
+    const accounts = accountsOn(db);
     const response = await accounts.handle(
-      new Request("http://localhost/api/account/signup", {
-        method: "POST",
-        headers: { origin: "http://localhost", "content-type": "application/json" },
-        body: JSON.stringify({
-          email: "new@example.test",
-          password: "test-password-long",
-          role: "owner",
-        }),
+      accountRequest("signup", {
+        email: "new@example.test",
+        password: "test-password-long",
+        role: "owner",
       }),
       "signup",
     );

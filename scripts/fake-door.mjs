@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import path from "node:path";
+import { setTimeout } from "node:timers/promises";
 /** Local test fixture implementing the module HTTP boundary, never selected by production code. */
 export async function fakeDoor(dir) {
   await mkdir(dir, { recursive: true });
@@ -14,7 +15,14 @@ export async function fakeDoor(dir) {
   const sent = [];
   const calls = [];
   const history = [];
-  const state = { off: false, asyncEmail: true, unknownEmail: false, malformedStream: false };
+  const state = {
+    off: false,
+    asyncEmail: true,
+    unknownEmail: false,
+    malformedStream: false,
+    slowEmailMs: 0,
+    failSlowEmail: false,
+  };
   const server = createServer(async (req, res) => {
     const reply = (value, status = 200) => {
       res.writeHead(status, { "content-type": "application/json" });
@@ -103,6 +111,7 @@ export async function fakeDoor(dir) {
     const old = keys.get(key);
     if (old) {
       if (old.digest !== digest) return reply({ error: "IDEMPOTENCY_KEY_REUSED" }, 409);
+      if (!old.result) return reply({ error: "IDEMPOTENCY_PENDING" }, 409);
       return reply(old.result);
     }
     let result = {};
@@ -125,6 +134,15 @@ export async function fakeDoor(dir) {
       result = { status: "running", job_id: job };
     } else if (capability === "email.send") {
       if (state.unknownEmail) return reply({ error: "MODULE_OUTCOME_UNKNOWN" }, 504);
+      if (state.slowEmailMs) {
+        // The key is taken before the wait, so an overlapping call is refused as the real door refuses it.
+        keys.set(key, { digest });
+        await setTimeout(state.slowEmailMs);
+        if (state.failSlowEmail) {
+          keys.delete(key);
+          return reply({ error: "MODULE_FAILED" }, 500);
+        }
+      }
       if (state.asyncEmail) {
         const job = `job_${randomUUID()}`;
         jobs.set(job, { status: "running", finish: () => sent.push(input) });

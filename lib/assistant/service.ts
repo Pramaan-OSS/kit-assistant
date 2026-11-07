@@ -69,58 +69,56 @@ export function createAssistant(db: Pool, client: PramaanClient, project: string
     ]);
     return { ...response, operation: key };
   }
+  async function refuseDecision(key: string): Promise<never> {
+    const r = await db.query(
+      "SELECT status,expires_at<=now() AS expired FROM assistant_approvals WHERE id=$1",
+      [key],
+    );
+    const a = r.rows[0];
+    if (!a) fail(404, "Request not found.");
+    if (a.expired && ["pending", "approved"].includes(a.status))
+      fail(409, "This request has expired.");
+    return fail(409, "This request has already been decided.");
+  }
+  // The door can take 60 s, so no connection or row lock is held across it: each write is one short statement, and
+  // the door runs one call per key (a.id). A click that overlaps a running call is refused there as uncertain, so
+  // each outcome below yields to what a concurrent click may have written: a real result always replaces `unknown`.
   async function execute(u: User, value: unknown, decision: unknown) {
     admin(u);
     const key = id(value);
-    const tx = await db.connect();
-    try {
-      await tx.query("BEGIN");
-      const r = await tx.query("SELECT * FROM assistant_approvals WHERE id=$1 FOR UPDATE", [key]);
-      const a = r.rows[0];
-      if (!a) fail(404, "Request not found.");
-      if (decision === "deny") {
-        if (a.status !== "pending") fail(409, "This request has already been decided.");
-        await tx.query("UPDATE assistant_approvals SET status='denied',decided_by=$2 WHERE id=$1", [
-          key,
-          u.id,
-        ]);
-      } else if (decision === "approve") {
-        if (!["pending", "approved"].includes(a.status))
-          fail(409, "This request has already been decided.");
-        if (new Date(a.expires_at).getTime() <= Date.now()) fail(409, "This request has expired.");
-        try {
-          const result = await client.call<Record<string, unknown>>(a.capability, a.input, a.id);
-          const job = typeof result.job_id === "string" ? result.job_id : null;
-          await tx.query(
-            "UPDATE assistant_approvals SET status=$2,decided_by=$3,job_id=$4,result=$5 WHERE id=$1",
-            [key, job ? "waiting" : "done", u.id, job, {}],
-          );
-        } catch (e) {
-          if (e instanceof CapabilityError) {
-            await tx.query("UPDATE assistant_approvals SET status=$2,decided_by=$3 WHERE id=$1", [
-              key,
-              e.unknown ? "unknown" : "approved",
-              u.id,
-            ]);
-            await tx.query("COMMIT");
-            throw e;
-          }
-          throw e;
-        }
-      } else fail(400, "Choose approve or decline.");
-      await tx.query("COMMIT");
-      return {
-        message:
-          decision === "deny"
-            ? "Declined. Nothing was sent."
-            : "Approved. Check the request status for completion.",
-      };
-    } catch (e) {
-      await tx.query("ROLLBACK");
-      throw e;
-    } finally {
-      tx.release();
+    if (decision === "deny") {
+      const r = await db.query(
+        "UPDATE assistant_approvals SET status='denied',decided_by=$2 WHERE id=$1 AND status='pending'",
+        [key, u.id],
+      );
+      if (!r.rowCount) await refuseDecision(key);
+      return { message: "Declined. Nothing was sent." };
     }
+    if (decision !== "approve") fail(400, "Choose approve or decline.");
+    const r = await db.query(
+      "UPDATE assistant_approvals SET status='approved',decided_by=$2 WHERE id=$1 AND status IN ('pending','approved') AND expires_at>now() RETURNING id,capability,input",
+      [key, u.id],
+    );
+    const a = r.rows[0] ?? (await refuseDecision(key));
+    let result: Record<string, unknown>;
+    try {
+      result = await client.call<Record<string, unknown>>(a.capability, a.input, a.id);
+    } catch (e) {
+      if (e instanceof CapabilityError)
+        await db.query(
+          e.unknown
+            ? "UPDATE assistant_approvals SET status='unknown' WHERE id=$1 AND status='approved'"
+            : "UPDATE assistant_approvals SET status='approved' WHERE id=$1 AND status='unknown'",
+          [key],
+        );
+      throw e;
+    }
+    const job = typeof result.job_id === "string" ? result.job_id : null;
+    await db.query(
+      "UPDATE assistant_approvals SET status=$2,job_id=$3,result=$4 WHERE id=$1 AND status IN ('approved','unknown')",
+      [key, job ? "waiting" : "done", job, {}],
+    );
+    return { message: "Approved. Check the request status for completion." };
   }
   async function handle(u: User, action: string, method: string, input: Record<string, unknown>) {
     if (action === "setup" && method === "POST") {
