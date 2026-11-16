@@ -1,5 +1,5 @@
 {
-  "name": "assistant-kit",
+  "name": "account-app",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@11.15.1",
@@ -12,14 +12,10 @@
     "lint": "node scripts/check-imports.mjs && biome check .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --no-file-parallelism --exclude \".scratch/**\" --exclude \".evidence/**\"",
-    "build": "node scripts/generate-routes.mjs && CIRCLE_NODE_TOTAL=2 RAYON_NUM_THREADS=1 next build",
+    "build": "node scripts/generate-routes.mjs && next build",
     "start": "next start",
     "check": "pnpm generate && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
-    "theme": "node scripts/generate-theme.mjs",
-    "db:migrate": "node scripts/migrate.mjs",
-    "walk": "node scripts/walk.mjs",
-    "blocks:check": "node scripts/check-blocks.mjs",
-    "gates:static": "node scripts/check-contract.mjs"
+    "theme": "node scripts/generate-theme.mjs"
   },
   "dependencies": {
     "@fontsource-variable/bricolage-grotesque": "5.3.0",
@@ -50,9 +46,6 @@
     "tailwindcss": "4.3.3",
     "typescript": "5.9.3",
     "vitest": "5.0.2",
-    "yaml": "2.9.1",
-    "@playwright/test": "1.64.1"
-  },
-  "version": "0.1.0",
-  "license": "MIT"
+    "yaml": "2.9.1"
+  }
 }

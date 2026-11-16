@@ -5,3 +5,5 @@ A single Next.js app for a business assistant: private conversations, personal m
 See KIT.md for setup and checks, GAPS.md for platform transport requirements, and kit-ci.json for measured gate results. Capabilities are off by default; no live paid calls are made by the tests.
 
 Uses the MIT Pramaan data starter and the published chat, memory, approvals, wallet, activity and theme blocks pinned in blocks.lock.json. Preserved source files retain their exact bytes; executable adaptations are separate. See NOTICE.md and LICENSE.
+
+The kit carries no browser tools. To run `node scripts/walk.mjs`, install `@playwright/test` 1.64.1 outside the kit and set `WALK_BROWSER_MODULE` to its `index.mjs`.

@@ -63,8 +63,8 @@ An email draft is immutable after creation. The owner/admin reviews those exact 
 
 ## Run and check
 
-Use Node 24.18.0 and pnpm 11.15.1. Install with `pnpm install --frozen-lockfile --ignore-scripts --ignore-pnpmfile`. Set DATABASE_URL, SESSION_SECRET (at least 32 characters), PRAMAAN_PROJECT_ID and APP_ORIGIN in your shell; never commit them. Run `pnpm db:migrate`, `pnpm build`, then `pnpm start --port 3412`. For ordinary development use `pnpm dev --port 3412`.
+Use Node 24.18.0 and pnpm 11.15.1. Install with `pnpm install --frozen-lockfile --ignore-scripts --ignore-pnpmfile`. Set DATABASE_URL, SESSION_SECRET (at least 32 characters), PRAMAAN_PROJECT_ID and APP_ORIGIN in your shell; never commit them. Run `node scripts/migrate.mjs`, `pnpm build`, then `pnpm start --port 3412`. For ordinary development use `pnpm dev --port 3412`.
 
-For a disposable database, use postgres:16-alpine with 192 MiB RAM and 0.5 CPUs, then run migrations before `pnpm test`. Tests deliberately fail without a real database. Test files run sequentially. The build sets CIRCLE_NODE_TOTAL=2 so Next uses one page worker, and RAYON_NUM_THREADS=1 bounds compiler parallelism; this keeps the build inside the kit memory budget without changing protected config. For browser checks, run `node scripts/local-server.mjs` with DATABASE_URL set, then `pnpm walk`. This uses fake calls only and resets that test database. Never point the walk at customer data.
+For a disposable database, use postgres:16-alpine with 192 MiB RAM and 0.5 CPUs, then run migrations before `pnpm test`. Tests deliberately fail without a real database. Test files run sequentially. For browser checks, run `node scripts/local-server.mjs` with DATABASE_URL set, then `node scripts/walk.mjs`. The kit carries no browser tools: install `@playwright/test` 1.64.1 outside the kit and set `WALK_BROWSER_MODULE` to its `index.mjs`. This uses fake calls only and resets that test database. Never point the walk at customer data.
 
 Run lint from a fresh git worktree, since the starter lint scans every file and local ignored tool folders are deliberately excluded only by .gitignore, never by editing biome.json.
