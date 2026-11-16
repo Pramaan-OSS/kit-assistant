@@ -5,7 +5,7 @@
       "label": "Create an account, sign out and sign back in",
       "steps": [
         {
-          "enterAs": "visitor"
+          "enterAs": "member"
         },
         {
           "goto": "/"
