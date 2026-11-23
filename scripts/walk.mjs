@@ -140,13 +140,13 @@ try {
   await test("member-signup-and-team-access", async () => {
     await mp.goto("/");
     await mp.getByRole("button", { name: "Create an account", exact: true }).click();
-    await mp.getByLabel("Email", { exact: true }).fill("member@example.test");
+    await mp.getByLabel("Email", { exact: true }).fill("delivered+assistant-member@resend.dev");
     await mp.getByLabel("Password", { exact: true }).fill("Member-password-12345");
     await mp.getByRole("button", { name: "Create account", exact: true }).click();
-    await expect(mp.getByText("Signed in as member@example.test.")).toBeVisible();
+    await expect(mp.getByText("Signed in as delivered+assistant-member@resend.dev.")).toBeVisible();
     expect((await member.request.get("/api/assistant/state")).status()).toBe(403);
     await page.goto("/team");
-    await page.getByLabel("Member email").fill("member@example.test");
+    await page.getByLabel("Member email").fill("delivered+assistant-member@resend.dev");
     await page.getByRole("button", { name: "Save team access" }).click();
     await expect(page.getByText("Team access saved.")).toBeVisible();
     await mp.goto("/chat");
@@ -231,7 +231,7 @@ try {
   });
   await test("admin-approval-and-owner-only-controls", async () => {
     await page.goto("/team");
-    await page.getByLabel("Member email").fill("member@example.test");
+    await page.getByLabel("Member email").fill("delivered+assistant-member@resend.dev");
     await page.getByLabel("Team role").selectOption("admin");
     await page.getByRole("button", { name: "Save team access" }).click();
     await expect(page.getByText("Team access saved.")).toBeVisible();
@@ -240,7 +240,7 @@ try {
       (
         await post(member, "email", {
           conversation: state.conversations[0].id,
-          to: "recipient@example.test",
+          to: "delivered+assistant-recipient@resend.dev",
           subject: "Admin review",
           text: "Reviewed by an admin.",
         })
@@ -255,7 +255,10 @@ try {
     await expect(item.getByText("Status: done")).toBeVisible();
     expect(
       (
-        await post(member, "team", { email: "shipping-member@example.test", role: "admin" })
+        await post(member, "team", {
+          email: "delivered+assistant-shipping-member@resend.dev",
+          role: "admin",
+        })
       ).status(),
     ).toBe(403);
     expect(
@@ -272,14 +275,18 @@ try {
     const stranger = await context();
     await stranger.request.post("/api/account/signup", {
       headers: { origin: config.origin },
-      data: { email: "stranger@example.test", password: "Stranger-password-12345", role: "owner" },
+      data: {
+        email: "delivered+assistant-stranger@resend.dev",
+        password: "Stranger-password-12345",
+        role: "owner",
+      },
     });
     const s = await stranger.request.get("/api/account/session");
     expect((await s.json()).user.role).toBe("member");
     expect((await stranger.request.get("/api/assistant/memories")).status()).toBe(403);
     await stranger.close();
     await page.goto("/team");
-    await page.getByLabel("Member email").fill("member@example.test");
+    await page.getByLabel("Member email").fill("delivered+assistant-member@resend.dev");
     await page.getByLabel("Remove team access").check();
     await page.getByRole("button", { name: "Save team access" }).click();
     await expect(page.getByText("Team access removed.")).toBeVisible();
@@ -301,7 +308,7 @@ try {
     await page.getByLabel("Message", { exact: true }).fill("No dispatch");
     await page.getByRole("button", { name: "Send message", exact: true }).click();
     await expect(page.getByText("This capability is off.", { exact: false })).toBeVisible();
-    await page.getByLabel("To", { exact: true }).fill("recipient@example.test");
+    await page.getByLabel("To", { exact: true }).fill("delivered+assistant-recipient@resend.dev");
     await page.getByLabel("Subject", { exact: true }).fill("Off request");
     await page.getByLabel("Email text", { exact: true }).fill("Must wait");
     await page.getByRole("button", { name: "Request email approval" }).click();

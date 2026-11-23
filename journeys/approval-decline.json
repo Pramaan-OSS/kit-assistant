@@ -19,7 +19,7 @@
         },
         {
           "fill": "To",
-          "value": "recipient@example.test"
+          "value": "delivered+assistant-recipient@resend.dev"
         },
         {
           "fill": "Subject",

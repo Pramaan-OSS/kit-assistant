@@ -85,7 +85,7 @@ export async function fakeDoor(dir) {
         emit("tool_call_delta", {
           index: 0,
           arguments: JSON.stringify({
-            to: "recipient@example.test",
+            to: "delivered+assistant-recipient@resend.dev",
             subject: "Review my proposal",
             text: "Please review the proposal.",
           }),

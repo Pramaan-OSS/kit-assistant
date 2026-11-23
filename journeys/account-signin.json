@@ -15,7 +15,7 @@
         },
         {
           "fill": "Email",
-          "value": "signin-member@example.test"
+          "value": "delivered+assistant-signin-member@resend.dev"
         },
         {
           "fill": "Password",
@@ -25,7 +25,7 @@
           "click": "Create account"
         },
         {
-          "expectText": "Signed in as signin-member@example.test."
+          "expectText": "Signed in as delivered+assistant-signin-member@resend.dev."
         },
         {
           "click": "Sign out"
@@ -35,7 +35,7 @@
         },
         {
           "fill": "Email",
-          "value": "signin-member@example.test"
+          "value": "delivered+assistant-signin-member@resend.dev"
         },
         {
           "fill": "Password",
@@ -45,7 +45,7 @@
           "click": "Sign in"
         },
         {
-          "expectText": "Signed in as signin-member@example.test."
+          "expectText": "Signed in as delivered+assistant-signin-member@resend.dev."
         }
       ]
     }

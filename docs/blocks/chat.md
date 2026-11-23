@@ -64,7 +64,7 @@ Server only, from `app/api/pramaan/chat/`, with `PRAMAAN_API_KEY`:
 
 Only the stream's known events (text, tool calls, usage, done, error) reach the browser. Which
 model answers is Pramaan's routing, not this block's. Try it on the fake with `PRAMAAN_FAKE=1 pnpm
-dev` and open `/chat`: say "Email sam@example.com" to see an action wait for a yes.
+dev` and open `/chat`: say "Email delivered+assistant-sam@resend.dev" to see an action wait for a yes.
 
 ## Files
 
